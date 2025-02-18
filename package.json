@@ -1,0 +1,29 @@
+{
+  "name": "node-farm",
+  "version": "1.0.0",
+  "description": "Learning node.js",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lgope/node-farm.git"
+  },
+  "author": "Lakshman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lgope/node-farm/issues"
+  },
+  "homepage": "https://github.com/lgope/node-farm#readme",
+  "dependencies": {
+    "slugify": "~1.3.5"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^2.0.2",
+    "ws": "^8.18.0"
+  }
+}
