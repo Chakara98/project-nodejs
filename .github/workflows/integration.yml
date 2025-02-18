@@ -2,7 +2,11 @@ name: test workflow
 
 on:
   push:
-    branches:["main"]
+    branches:
+      - main
+    pull_request:
+      - main
+      
 jobs:
  unit-testing:
 
