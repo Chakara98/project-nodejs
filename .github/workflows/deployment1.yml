@@ -1,0 +1,99 @@
+name:Deployment Workflow
+    on:
+     push:
+       branches:["main","develop"]
+       
+    env:
+     NODE_VERSION:v20.17.0
+     
+    jobs:
+      lint-and-test:
+       runs-on: ubunt-latest
+       steps:
+        -uses:actions/
+     checkout@v3
+        -name:Use Node.js $
+      {{env.NODE_VERSION}}
+         uses:actions/setup-node@v3
+         with:
+          node-version:$
+       {{env.NODE_VERSION}}
+            cache: 'npm'
+            -run:npm i
+            -run: npm run build
+            
+        deploy-to-production:::::
+          if:github.event_name == 'push'&& github.ref == 'ref/heads/main'
+          need:lint-and-test
+          runs-on:ubuntu-latest
+          steps:
+            -uses:actions/
+          checkout@v3
+            -name:UseNode.js$
+         {{env.NODE_VERSION}}
+             uses:actionss/setup-node@v3
+             with:
+              node-version:$
+         {{env.NODE_VERSION}}
+            cache:'npm'
+           -run:npm i
+           -run:npm run build
+           -name:Deploy to Production Environment
+            uses:appleboy/ssh-action@master
+            with:
+              host:${{secret.HOST}}
+              username:$
+           {{secrets.USERNAME}}
+              key:$
+           {{secrets.SSH_PRIV_KEY}}
+               script:|
+                set -e
+                cd /var/www/
+           api.cultivosconnct.com
+                git fetch --all && \
+                git reset --hard origin/
+            main &&\
+                git pull &&\
+                npm i &&\
+                npm i &&\
+                npm run build &&\
+                npm run cpstatic &&\
+                pm2 reload prod:api
+                
+            deploy-to-staging:
+             if:github.event_name == 'push' && github.ref == 'refs/heads/develop'
+             needs:lint-and-latest
+             runs-on:ubuntu-latest
+             steps:
+               -uses:actions/
+            checkout@v3
+               -name:Use Node.js$
+           {{env.NODE_VERSION}}
+               uses:actions/setup-node@v3
+               with:
+                 node-verssion:$
+            {{env.NODE_VERSION}}
+                cache:'npm'
+               -run:npm i
+               -run:npm run build
+               -name:Deploy to Staging
+             Environment
+                uses:appleyboy/ssh-action@master
+                with:
+                 host:${{ secrets.HOST}}
+                 username:$
+             {{ secrets.USERNAME }}
+                  key:$
+              {{secrets.SSH_PRIV_KEY}}
+                   script: |
+                   set -e
+                   cd /var/www/
+               api.staging.cultivosconnect.com
+                    git fetch --all &&\
+                    git reset --hard origin/
+                develop &&\
+                    git pull &&\
+                    npm i &&\
+                    npm run build &&\
+                    npm run cpstatic &&\
+                    pm2 reload staging:api
